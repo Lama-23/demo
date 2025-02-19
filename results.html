@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Analysis Results</title>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Color Palette:
+       - Off-white:  #fffcf3
+       - Light blue: #abb0c4
+       - Light tan:  #f2dfba
+       - Dark:       #27282b
+    */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #fffcf3, #f2dfba);
+      color: #27282b;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: #fffcf3;
+      /*border: 2px solid #abb0c4;*/
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    h1, h2, h3 {
+      text-align: center;
+      color:  rgba(39, 40, 43, 0.8);
+      margin-bottom: 1rem;
+    }
+    /* Overall Score Section */
+    #scoreContainer {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      /*border: 1px solid #abb0c4;*/
+      border-radius: 12px;
+      background-color: rgba(242, 223, 186, 0.5);
+    }
+    #scoreContainer p {
+      font-size: 1.1rem;
+      color: #27282b;
+    }
+    /* Chart Containers */
+    .chart-section {
+      margin: 2rem 0;
+    }
+    /* Navigation Button */
+    .nav-btn {
+      display: block;
+      width: 220px;
+      margin: 2rem auto 0;
+      background: linear-gradient(135deg, #f2dfba, #abb0c4);
+      color: #27282b;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(242, 222, 187, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Analysis Results</h1>
+    
+    <!-- Overall Score -->
+    <div id="scoreContainer">
+      <h2>Overall Performance Score</h2>
+      <p id="scoreDisplay"><strong>-- / 100</strong></p>
+      <p id="scoreComment"></p>
+    </div>
+    
+    <!-- Emotional Analysis Chart -->
+    <div class="chart-section">
+      <canvas id="emotionalChart"></canvas>
+    </div>
+    <!-- Vocal Tone Chart -->
+    <div class="chart-section">
+      <canvas id="vocalToneChart"></canvas>
+    </div>
+    <!-- Speech Pattern Chart -->
+    <div class="chart-section">
+      <canvas id="speechPatternChart"></canvas>
+    </div>
+    
+    <!-- Navigation Button -->
+    <button class="nav-btn" onclick="window.location.href='index2.html'">Analyze Another Video</button>
+  </div>
+
+  <script>
+    // Retrieve analysis data from localStorage
+    const analysisData = JSON.parse(localStorage.getItem('analysisData'));
+    if (!analysisData) {
+      document.body.innerHTML = "<h2 style='text-align:center;margin-top:50px;'>No analysis data found. Please upload a video first.</h2>";
+    } else {
+      // Display overall score and commentary based on performance
+      document.getElementById('scoreDisplay').innerHTML = `<strong>${analysisData.overallScore} / 100</strong>`;
+      let comment = "";
+      if (analysisData.overallScore >= 85) {
+        comment = "Outstanding performance with a deeply evocative and melancholic tone.";
+      } else if (analysisData.overallScore >= 70) {
+        comment = "A solid performance with a noticeable emotional depth.";
+      } else {
+        comment = "There is room for improvement in conveying the intended emotion.";
+      }
+      document.getElementById('scoreComment').textContent = comment;
+
+      // Create Emotional Analysis Chart
+      new Chart(document.getElementById('emotionalChart'), {
+        type: 'line',
+        data: {
+          labels: ['Segment 1', 'Segment 2', 'Segment 3', 'Segment 4', 'Segment 5'],
+          datasets: [
+            {
+              label: 'Happiness',
+              data: analysisData.emotionalAnalysis.happiness,
+              borderColor: '#abb0c4',
+              fill: false,
+              tension: 0.2
+            },
+            {
+              label: 'Sadness',
+              data: analysisData.emotionalAnalysis.sadness,
+              borderColor: '#27282b',
+              fill: false,
+              tension: 0.2
+            },
+            {
+              label: 'Anger',
+              data: analysisData.emotionalAnalysis.anger,
+              borderColor: '#f2dfba',
+              fill: false,
+              tension: 0.2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true, max: 1 }
+          }
+        }
+      });
+
+      // Create Vocal Tone Chart
+      new Chart(document.getElementById('vocalToneChart'), {
+        type: 'line',
+        data: {
+          labels: ['Segment 1', 'Segment 2', 'Segment 3', 'Segment 4', 'Segment 5'],
+          datasets: [
+            {
+              label: 'Pitch (Hz)',
+              data: analysisData.vocalTone.pitch,
+              borderColor: '#abb0c4',
+              fill: false,
+              tension: 0.2
+            },
+            {
+              label: 'Intensity',
+              data: analysisData.vocalTone.intensity,
+              borderColor: '#27282b',
+              fill: false,
+              tension: 0.2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      // Create Speech Pattern Chart
+      new Chart(document.getElementById('speechPatternChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Segment 1', 'Segment 2', 'Segment 3', 'Segment 4', 'Segment 5'],
+          datasets: [
+            {
+              label: 'Speaking Rate (WPM)',
+              data: analysisData.speechPatterns.speakingRate,
+              backgroundColor: 'rgba(171, 176, 196, 0.6)'
+            },
+            {
+              label: 'Pauses (count)',
+              data: analysisData.speechPatterns.pauses,
+              backgroundColor: 'rgba(255, 99, 132, 0.6)'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
