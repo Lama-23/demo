@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Audition System</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #27282a; /* Dark gray background */
+            color: #fffcf3; /* Off-white text color */
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            padding: 40px 20px;
+            text-align: center; /* Centers the text */
+        }
+
+        h1 {
+            color: #f2debb; /* Light tan color */
+            margin-bottom: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .upload-container {
+            border: 2px dashed #abb0c4; /* Light blue border */
+            padding: 3rem 2rem;
+            margin: 2rem auto; /* Auto margins for horizontal centering */
+            border-radius: 16px;
+            background: linear-gradient(145deg, #2d2e30, #27282a); /* Gradient dark background */
+            box-shadow: 8px 8px 16px #1f2022, -8px -8px 16px #2f3034; /* 3D shadow effect */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .upload-container:hover {
+            border-color: #f2debb; /* Hover border color change */
+            transform: translateY(-2px); /* Slight raise effect on hover */
+        }
+
+        .upload-container.dragover {
+            background: #2d2e30; /* Darken background when dragging over */
+            border-color: #f2debb; /* Tan border on drag over */
+        }
+
+        #video-preview {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto; /* Centering video horizontally */
+            display: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        #loading {
+            display: none;
+            margin: 2rem auto; /* Centering loading text */
+            color: #abb0c4; /* Light blue text for loading */
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto; /* Centers the spinner horizontally */
+            border: 4px solid rgba(171, 176, 196, 0.2); /* Light grey border */
+            border-top: 4px solid #f2debb; /* Tan color for top border */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        #result {
+            display: none;
+            font-size: 1.5rem;
+            margin: 2rem auto; /* Centering result horizontally */
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: #2d2e30; /* Dark background for result */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #3a3b3e; /* Dark grey border */
+        }
+
+        button {
+            background: linear-gradient(135deg, #f2debb 0%, #abb0c4 100%); /* Gradient button */
+            color: #27282a; /* Dark text for buttons */
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: 20px; /* Space above the button */
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(242, 222, 187, 0.3);
+        }
+
+        p {
+            color: #abb0c4; /* Light blue text color */
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Intelligent Audition System</h1>
+        
+        <div class="upload-container">
+            <input type="file" id="video-upload" accept="video/*" hidden/>
+            <button onclick="document.getElementById('video-upload').click()">
+                Upload Video
+            </button>
+            <p>Drag and drop video file anywhere</p>
+        </div>
+
+        <video id="video-preview" controls></video>
+        
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing composition, lighting, and framing...</p>
+        </div>
+
+        <div id="result">
+            The final score is: <span id="score" style="color: #f2debb; font-size: 2rem; font-weight: bold;">95</span>/100
+        </div>
+
+        <script>
+            const videoUpload = document.getElementById('video-upload');
+            const videoPreview = document.getElementById('video-preview');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const scoreDisplay = document.getElementById('score');
+            const uploadContainer = document.querySelector('.upload-container');
+
+            // Handle file selection
+            videoUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    videoPreview.src = url;
+                    videoPreview.style.display = 'block';
+                    startAnalysis();
+                }
+            });
+
+            // Simulate analysis process
+            function startAnalysis() {
+                loading.style.display = 'block';
+                result.style.display = 'none';
+
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    result.style.display = 'block';
+                }, 3000);
+            }
+
+            // Drag and drop handling
+            document.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.add('dragover');
+            });
+
+            document.addEventListener('dragleave', () => {
+                uploadContainer.classList.remove('dragover');
+            });
+
+            document.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('video/')) {
+                    videoUpload.files = e.dataTransfer.files;
+                    const event = new Event('change');
+                    videoUpload.dispatchEvent(event);
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>
