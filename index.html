@@ -4,199 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Intelligent Audition Evaluation System</title>
-
-  <!-- Import Economica font from Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Economica:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    /* Color Palette:
-       - Off-white:  #fffcf3
-       - Light blue: #abb0c4
-       - Light tan:  #f2dfba
-       - Dark:       #27282b
-    */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    html, body {
-      width: 100%;
-      height: 100%;
-      font-family: 'Economica', sans-serif;
-      background-color: #fffcf3;
-      color: #27282b;
-    }
-    body {
-      min-height: 100vh;
-    }
-    .content {
-      flex: 1;
-    }
-    footer {
-      height: 10vh;
-      background: linear-gradient(135deg, #f2dfba, #abb0c4);
-      color: #fffcf3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-    }    
-    /* Header occupies 25% of the viewport height with a gradient background and bottom divider */
-    header {
-      height: 25vh;
-      background: linear-gradient(135deg, #f2dfba, #abb0c4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      /*border-bottom: 2px solid #abb0c4; /* Divider line between header and body */
-      position: relative;
-      overflow: hidden;
-    }
-    /* Logo occupies at least 30% of the header height */
-    .logo {
-      height: 25%;
-      max-height: 120px;
-      width: auto;
-      margin-bottom: 1rem;
-    }
-    .header-title {
-      font-size: 3rem; /* Increased to suit header size */
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: rgba(39, 40, 43, 0.8);
-    }
-    .slogan {
-      font-size: 1.6rem;
-      color: #4a4c52;
-    }
-    /* Hero Section below header */
-    .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      max-width: 1100px;
-      margin: 2rem auto;
-      padding: 0 2rem;
-    }
-    .hero h1 {
-      font-size: 2.1rem;
-      line-height: 1.2;
-      margin-bottom: 1rem;
-      color: rgba(39, 40, 43, 0.8);
-      font-weight: 700;
-    }
-    .hero p {
-      font-size: 1.5rem;
-      color: rgba(39, 40, 43, 0.8);
-      max-width: auto;
-      margin-bottom: 1rem;
-      line-height: 2;
-    }
-    /* Main Content for upload box */
-    .main-content {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 2rem;
-      position: relative;
-    }
-    /* Upload Container styling */
-    .upload-container {
-      border: 1px dashed #abb0c4;
-      padding: 3rem 2rem;
-      border-radius: 16px;
-      background-color: #fffcf3;
-      box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.05),
-                  -4px -4px 12px rgba(255, 255, 255, 0.2);
-      transition: border-color 0.3s ease, background-color 0.3s ease;
-      text-align: center;
-    }
-    .upload-container:hover {
-      border-color: #27282b;
-    }
-    .upload-container.dragover {
-      background-color: #f2dfba;
-    }
-    /* Video Preview styling */
-    #video-preview {
-      width: 100%;
-      margin-top: 1.5rem;
-      display: none;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    }
-    /* Loading Spinner styling */
-    #loading {
-      display: none;
-      margin-top: 2rem;
-      text-align: center;
-      color: #abb0c4;
-    }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      margin: 0 auto;
-      border: 4px solid rgba(171, 176, 196, 0.2);
-      border-top: 4px solid #f2dfba;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    /* File Upload Button styling */
-    .upload-btn {
-      background: linear-gradient(135deg, #f2dfba 0%, #abb0c4 100%);
-      color: rgba(39, 40, 43, 0.8);
-      padding: 12px 28px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 2rem;
-      font-weight: 20%;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-top: 20px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .upload-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(242, 222, 187, 0.3);
-    }
-    .upload-container p {
-      color: #abb0c4;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
+    /* Color Palette */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; font-family: 'Economica', sans-serif; background-color: #fffcf3; color: #27282b; }
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+    header { background: linear-gradient(135deg, #f2dfba, #abb0c4); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+    .logo { height: auto; max-width: 80%; width: 150px; }
+    .header-title { font-size: calc(1.5rem + 1vw); }
+    .slogan { font-size: calc(1rem + 0.5vw); }
+    .hero { max-width: 95%; margin: auto; padding: 1rem; text-align: center; }
+    .hero h1, .hero p { margin-bottom: 1rem; }
+    .main-content { max-width: 95%; margin: auto; padding: 1rem; }
+    .upload-container { border: 1px dashed #abb0c4; padding: 2rem; border-radius: 16px; text-align: center; transition: border-color 0.3s ease, background-color 0.3s ease; }
+    .upload-container:hover { border-color: #27282b; }
+    .upload-btn { background: linear-gradient(135deg, #f2dfba, #abb0c4); color: #27282b; padding: 10px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.2rem; }
+    footer { background: linear-gradient(135deg, #f2dfba, #abb0c4); color: #fffcf3; display: flex; align-items: center; justify-content: center; font-size: 1rem; padding: 10px; }
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header>
-    <!-- Replace "logo.png" with your actual logo image path -->
     <img src="logo copy 4.png" alt="Logo" class="logo" />
     <div class="header-title">INTELLIGENT AUDITION SYSTEM</div>
     <div class="slogan">Enhancing Actor Selection Through AI</div>
   </header>
-
-  <!-- Hero Section -->
   <section class="hero">
-    <br>
-    <br>
     <h1>Effortless Performance Evaluation</h1>
-    <p>
-      Upload an audition video and let our AI analyze emotional consistency, facial expressions, vocal tone, and speech delivery.
-      We provide a fair, data-driven approach to performance evaluation.
-    </p>
+    <p>Upload an audition video and let our AI analyze emotional consistency, facial expressions, vocal tone, and speech delivery. We provide a fair, data-driven approach to performance evaluation.</p>
   </section>
-
-
-  <!-- Main Content -->
   <div class="main-content">
-    <!-- Upload Container -->
     <div class="upload-container" id="uploadContainer">
       <input type="file" id="video-upload" accept="video/*" hidden />
       <button class="upload-btn" onclick="document.getElementById('video-upload').click()">Upload Video</button>
@@ -208,77 +46,8 @@
       </div>
     </div>
   </div>
-
-  <script>
-    // Get DOM elements
-    const videoUpload = document.getElementById('video-upload');
-    const videoPreview = document.getElementById('video-preview');
-    const loading = document.getElementById('loading');
-    const uploadContainer = document.getElementById('uploadContainer');
-
-    // Dummy analysis data (example for a sad performance)
-    const dummyAnalysisData = {
-      overallScore: 89,
-      emotionalAnalysis: {
-        happiness: [0.2, 0.18, 0.15, 0.17, 0.16],
-        sadness: [0.8, 0.85, 0.9, 0.88, 0.87],
-        anger: [0.1, 0.08, 0.09, 0.1, 0.1]
-      },
-      vocalTone: {
-        pitch: [120, 122, 121, 123, 122],
-        intensity: [0.7, 0.68, 0.7, 0.69, 0.7]
-      },
-      speechPatterns: {
-        speakingRate: [140, 142, 141, 139, 140],
-        pauses: [3, 4, 3, 4, 3]
-      }
-    };
-
-    // Handle file selection
-    videoUpload.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const url = URL.createObjectURL(file);
-        videoPreview.src = url;
-        videoPreview.style.display = 'block';
-        startAnalysis();
-      }
-    });
-
-    // Simulate analysis process then redirect to results page
-    function startAnalysis() {
-      loading.style.display = 'block';
-      // Simulate a 3-second analysis delay
-      setTimeout(() => {
-        loading.style.display = 'none';
-        // Store analysis data in localStorage as JSON string
-        localStorage.setItem('analysisData', JSON.stringify(dummyAnalysisData));
-        // Redirect to the results page
-        window.location.href = "results.html";
-      }, 3000);
-    }
-
-    // Drag and drop handling
-    document.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadContainer.classList.add('dragover');
-    });
-    document.addEventListener('dragleave', () => {
-      uploadContainer.classList.remove('dragover');
-    });
-    document.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadContainer.classList.remove('dragover');
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith('video/')) {
-        videoUpload.files = e.dataTransfer.files;
-        const event = new Event('change');
-        videoUpload.dispatchEvent(event);
-      }
-    });
-  </script>
-    <footer>
-        &copy; 2025 Intelligent Audition System. All rights reserved.
-      </footer>
+  <footer>
+    &copy; 2025 Intelligent Audition System. All rights reserved.
+  </footer>
 </body>
 </html>
