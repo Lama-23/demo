@@ -22,6 +22,7 @@
     .upload-container:hover { border-color: #27282b; }
     .upload-btn { background: linear-gradient(135deg, #f2dfba, #abb0c4); color: #27282b; padding: 10px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.2rem; }
     footer { background: linear-gradient(135deg, #f2dfba, #abb0c4); color: #fffcf3; display: flex; align-items: center; justify-content: center; font-size: 1rem; padding: 10px; }
+    #loading { display: none; }
   </style>
 </head>
 <body>
@@ -36,10 +37,10 @@
   </section>
   <div class="main-content">
     <div class="upload-container" id="uploadContainer">
-      <input type="file" id="video-upload" accept="video/*" hidden />
+      <input type="file" id="video-upload" accept="video/*" hidden onchange="startAnalysis()"/>
       <button class="upload-btn" onclick="document.getElementById('video-upload').click()">Upload Video</button>
       <p>Drag and drop a video file anywhere</p>
-      <video id="video-preview" controls></video>
+      <video id="video-preview" controls hidden></video>
       <div id="loading">
         <div class="spinner"></div>
         <p>Analyzing ...</p>
@@ -49,5 +50,29 @@
   <footer>
     &copy; 2025 Intelligent Audition System. All rights reserved.
   </footer>
+
+  <script>
+    // Dummy data for analysis
+    const dummyAnalysisData = {
+      overallScore: 82,
+      emotionalAnalysis: {
+        happiness: [0.2, 0.3, 0.5, 0.6, 0.7],
+        sadness: [0.1, 0.2, 0.2, 0.1, 0.1],
+        anger: [0.1, 0.2, 0.2, 0.3, 0.3]
+      }
+    };
+
+    // Simulate analysis process then redirect to results page
+    function startAnalysis() {
+      const loadingElement = document.getElementById('loading');
+      loadingElement.style.display = 'block';  // Show loading indicator
+
+      setTimeout(() => {
+        loadingElement.style.display = 'none'; // Hide loading indicator
+        localStorage.setItem('analysisData', JSON.stringify(dummyAnalysisData)); // Store data in localStorage
+        window.location.href = "results.html"; // Redirect to results page
+      }, 3000); // Simulate a 3-second analysis delay
+    }
+  </script>
 </body>
 </html>
